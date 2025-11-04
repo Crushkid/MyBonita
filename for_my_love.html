@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>For My Love 💛</title>
+<style>
+  :root{
+    --bg:#0b0b0b;
+    --card:#0f0f0f;
+    --gold:#d4af37;
+    --soft:#1a1a1a;
+    --muted:#bfbfbf;
+    --accent: #ffd86b;
+    font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+  }
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#050505 0%, #0d0d0d 100%);color:#fff;overflow-x:hidden}
+  .app{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:28px}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(212,175,55,0.08); padding:28px; border-radius:16px; width:100%; max-width:920px; box-shadow: 0 10px 30px rgba(0,0,0,0.6);}
+
+  header {display:flex;gap:12px;align-items:center; justify-content:space-between; margin-bottom:12px;}
+  .logo {display:flex;align-items:center;gap:12px}
+  .badge {background:linear-gradient(90deg,var(--gold),var(--accent)); color:#111; padding:8px 12px; border-radius:999px; font-weight:700; letter-spacing:0.6px}
+  h1{margin:0;font-size:clamp(20px,3.5vw,36px); color:var(--gold); text-shadow:0 6px 18px rgba(212,175,55,0.08)}
+  p.lead{color:var(--muted); margin-top:6px}
+
+  /* Navigation */
+  .nav{display:flex;gap:8px; margin-top:16px; flex-wrap:wrap}
+  .nav button{background:transparent;border:1px solid rgba(212,175,55,0.14); color:var(--gold); padding:8px 12px;border-radius:12px;cursor:pointer}
+  .nav button.active{background:linear-gradient(90deg,var(--gold),var(--accent)); color:#111; box-shadow:0 6px 20px rgba(212,175,55,0.12)}
+  .hide{display:none}
+
+  /* Landing */
+  .intro {display:flex; gap:20px; align-items:center; justify-content:space-between; flex-wrap:wrap}
+  .intro .text {flex:1; min-width:250px}
+  .enterBtn {background:transparent;border:2px solid var(--gold); color:var(--gold); padding:12px 22px;border-radius:14px; font-weight:700; cursor:pointer; margin-top:18px}
+  .enterBtn:hover{transform:translateY(-3px); transition:all .15s ease}
+
+  /* Unlock */
+  .unlockBox{margin-top:18px; display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+  .unlockBox input{padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06); background:transparent;color:#fff; min-width:220px}
+  .unlockBox button{padding:10px 14px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--gold),var(--accent)); color:#111;font-weight:700; cursor:pointer}
+
+  /* Inbox */
+  .inbox-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-top:18px}
+  .envelope{
+    background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border:1px solid rgba(212,175,55,0.06);
+    padding:18px;border-radius:12px; cursor:pointer; position:relative; overflow:hidden;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .envelope:hover{transform:translateY(-6px); box-shadow:0 18px 30px rgba(0,0,0,0.6)}
+  .env-top{display:flex;align-items:center;gap:12px}
+  .circle{width:46px;height:46px;border-radius:50%;background:linear-gradient(90deg,var(--gold),var(--accent));display:flex;align-items:center;justify-content:center;color:#111;font-weight:800}
+  .env-title{font-weight:700;color:var(--gold)}
+  .env-sub{color:var(--muted);font-size:13px;margin-top:6px}
+  .read-dot{position:absolute;right:12px;top:12px;width:12px;height:12px;border-radius:50%;background:#b30d5f;box-shadow:0 0 8px rgba(179,13,95,0.22)}
+
+  /* Modal */
+  .modal-bg{position:fixed;inset:0;background:linear-gradient(0deg, rgba(0,0,0,0.6), rgba(0,0,0,0.6)); display:flex;align-items:center;justify-content:center;z-index:60}
+  .modal{background:linear-gradient(180deg,#0f0f0f,#0b0b0b); border:1px solid rgba(212,175,55,0.08); padding:22px;border-radius:14px; width:90%; max-width:560px; box-shadow:0 30px 80px rgba(0,0,0,0.7)}
+  .modal h3{margin:0;color:var(--gold)}
+  .modal p{color:var(--muted);line-height:1.5}
+  .btn-row{display:flex;gap:8px; margin-top:16px; justify-content:flex-end}
+  .btn{padding:8px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04); background:transparent;color:var(--gold);cursor:pointer}
+  .primary{background:linear-gradient(90deg,var(--gold),var(--accent)); color:#111; font-weight:700; border:none}
+
+  /* Quiz */
+  .question{background:var(--soft); padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03); margin:10px 0}
+  .question label{display:block;font-weight:700;color:var(--gold); margin-bottom:8px}
+  .question input[type="text"], .question textarea {width:100%; padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.04); background:transparent;color:#fff}
+  .savedNote{color:var(--muted);font-size:13px;margin-top:6px}
+
+  .score{font-weight:800;color:var(--gold);margin-top:12px}
+
+  /* Final */
+  .final-wrap{text-align:center;padding:28px}
+  .big-love{font-size:clamp(28px,6.5vw,64px); color:var(--gold); font-weight:900; letter-spacing:1px}
+  .subtle{color:var(--muted); margin-top:10px}
+  .hearts{position:relative;height:260px; margin-top:18px; pointer-events:none}
+
+  @keyframes floatUp {
+    0% { transform: translateY(0) scale(0.9); opacity:0}
+    10% { opacity:1 }
+    100% { transform: translateY(-420px) scale(1.1); opacity:0 }
+  }
+
+  footer{margin-top:18px;color:var(--muted); font-size:13px; text-align:center}
+  a.link{color:var(--gold); text-decoration:none; font-weight:700}
+
+  .muted{color:var(--muted); font-size:14px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="card" id="appCard">
+    <header>
+      <div class="logo">
+        <div class="badge">For Her</div>
+        <div>
+          <h1>To My Love</h1>
+          <div class="muted">A tiny interactive gift — handcrafted by your charming Mage</div>
+        </div>
+      </div>
+      <div class="nav" aria-label="Main navigation">
+        <button id="navHome" class="active">Home</button>
+        <button id="navInbox">Inbox</button>
+        <button id="navQuiz">Quiz</button>
+        <button id="navFinal">Final</button>
+      </div>
+    </header>
+
+    <!-- Landing / Home -->
+    <section id="home">
+      <div class="intro">
+        <div class="text">
+          <h2 style="margin:0;color:var(--gold)">Hey beautiful —</h2>
+          <p class="lead">I made something special for you. Click enter and unlock a few notes I wrote just for you.</p>
+          <div style="margin-top:12px">But first — can you answer our anniversary question to prove you're the best keeper of our memories?</div>
+          <div class="unlockBox" style="margin-top:12px">
+            <input id="annInput" placeholder="When is our anniversary?" aria-label="Anniversary answer" />
+            <button id="annCheck">Unlock</button>
+            <div id="annHint" class="muted" style="width:100%"></div>
+          </div>
+          <button class="enterBtn" id="enterBtn" style="display:none">Enter →</button>
+        </div>
+        <div style="min-width:240px; text-align:center;">
+          <svg width="180" height="180" viewBox="0 0 24 24" aria-hidden>
+            <defs>
+              <linearGradient id="g" x1="0" x2="1">
+                <stop offset="0" stop-color="#d4af37"/>
+                <stop offset="1" stop-color="#ffd86b"/>
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="24" height="24" rx="4" fill="#090909"/>
+            <g transform="translate(2,2) scale(0.8)">
+              <path d="M12 21s-8-4.5-8-11 3.6-6 6-6 2 1 2 1 0.8-1 2-1 6 0.5 6 6-8 11-8 11z" fill="url(#g)"/>
+            </g>
+          </svg>
+          <div class="muted" style="margin-top:10px">Handmade with code & heart</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Inbox -->
+    <section id="inbox" class="hide">
+      <h3 style="color:var(--gold);margin-top:6px">Your Inbox <span class="muted">— open each letter</span></h3>
+      <div class="inbox-grid" id="inboxGrid"></div>
+    </section>
+
+    <!-- Quiz -->
+    <section id="quiz" class="hide">
+      <h3 style="color:var(--gold);margin-top:6px">Tell me your thoughts <span class="muted">(answers save automatically)</span></h3>
+      <div id="quizContent">
+        <!-- questions injected by JS -->
+      </div>
+      <div style="display:flex;gap:8px;margin-top:14px;align-items:center">
+        <div id="quizSaved" class="savedNote"></div>
+      </div>
+    </section>
+
+    <!-- Final -->
+    <section id="final" class="hide">
+      <div class="final-wrap">
+        <div class="big-love">I ❤️ You</div>
+        <div class="subtle">Every little thing I made here is because I adore you — open your heart and take my hand.</div>
+        <div class="hearts" id="heartsContainer" aria-hidden="true"></div>
+        <div style="margin-top:18px">
+          <button id="replayBtn" class="btn">View Inbox Again</button>
+          <button id="shareBtn" class="btn primary">Copy Link to Share</button>
+          <div id="copyHint" class="muted" style="margin-top:10px"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="muted">Made with love By your charming Mage</footer>
+  </div>
+</div>
+
+<!-- Modal container -->
+<div id="modalRoot" class="hide" aria-hidden="true"></div>
+
+<script>
+(function(){
+  const CORRECT = ['october 1st','october 1','oct 1','10/1','01 oct','1 october','1st october','october 1st.','oct 1st.'].map(s=>s.toLowerCase());
+
+  // App state (persisted in localStorage under key 'love_site_v1')
+  const STORAGE_KEY = 'love_site_v1';
+  const defaultState = {
+    unlocked: false,
+    read: {},
+    answers: {},
+    createdAt: new Date().toISOString()
+  };
+  let state = Object.assign({}, defaultState, JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'));
+
+  function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+  // DOM refs
+  const homeSec = document.getElementById('home');
+  const inboxSec = document.getElementById('inbox');
+  const quizSec = document.getElementById('quiz');
+  const finalSec = document.getElementById('final');
+  const modalRoot = document.getElementById('modalRoot');
+  const annInput = document.getElementById('annInput');
+  const annCheck = document.getElementById('annCheck');
+  const annHint = document.getElementById('annHint');
+  const enterBtn = document.getElementById('enterBtn');
+  const nav = {
+    home: document.getElementById('navHome'),
+    inbox: document.getElementById('navInbox'),
+    quiz: document.getElementById('navQuiz'),
+    final: document.getElementById('navFinal')
+  };
+
+  function showSection(name){
+    // update nav active
+    Object.values(nav).forEach(b => b.classList.remove('active'));
+    if (nav[name]) nav[name].classList.add('active');
+    homeSec.classList.toggle('hide', name !== 'home');
+    inboxSec.classList.toggle('hide', name !== 'inbox');
+    quizSec.classList.toggle('hide', name !== 'quiz');
+    finalSec.classList.toggle('hide', name !== 'final');
+    // hearts cleanup
+    if (name !== 'final') clearHearts();
+  }
+
+  // Wire nav
+  nav.home.addEventListener('click', ()=> showSection('home'));
+  nav.inbox.addEventListener('click', ()=> showSection('inbox'));
+  nav.quiz.addEventListener('click', ()=> showSection('quiz'));
+  nav.final.addEventListener('click', ()=> showSection('final'));
+
+  // Unlock logic
+  function normalize(str){ return String(str || '').trim().toLowerCase().replace(/[\u2019']/g, "'"); }
+  function checkAnniversary(val){
+    const n = normalize(val);
+    // accept several forms
+    if (!n) return false;
+    // direct match with known variants
+    if (CORRECT.includes(n)) return true;
+    // also allow patterns like "october 1" or "oct 1st" etc via regex
+    if (/^oct(ober)?\.?\s*0?1(st)?$/.test(n)) return true;
+    if (/^10[\/.-]\s*0?1$/.test(n)) return true;
+    if (/^1\s*oct(ober)?/.test(n)) return true;
+    return false;
+  }
+
+  annCheck.addEventListener('click', ()=> {
+    const val = annInput.value;
+    if (checkAnniversary(val)){
+      annHint.textContent = 'Unlocked — welcome, my keeper of memories 💛';
+      state.unlocked = true;
+      saveState();
+      enterBtn.style.display = 'inline-block';
+      setTimeout(()=> showSection('inbox'), 700);
+    } else {
+      annHint.textContent = 'Aww… not quite. Try again 😉';
+      state.unlocked = false;
+      saveState();
+    }
+  });
+
+  // If previously unlocked, show enter immediately
+  if (state.unlocked) {
+    annHint.textContent = 'Already unlocked — welcome back 💛';
+    enterBtn.style.display = 'inline-block';
+  }
+
+  enterBtn.addEventListener('click', ()=> showSection('inbox'));
+
+  // Inbox data (short lovely + sarcastic)
+  const letters = [
+    { id: 'l1', title: 'Open me — for a smile', from: 'Your secret admirer', preview: 'I was going to write a novel...', body: "I was going to write you a novel, but my handwriting is as bad as my jokes. So here's the short version: I adore you." },
+    { id: 'l2', title: 'A tiny memory', from: 'Me', preview: 'That time I tried to be cool...', body: "I tried to act cool around you... failed spectacularly. Still worth it — your laugh is my favorite sound." },
+    { id: 'l3', title: 'When I miss you', from: 'Always', preview: 'You\'re my favorite problem', body: "You're lucky you met me — I'm basically your favorite problem now. Spoiler: I never want to be solved." }
+  ];
+
+  // Render inbox
+  const inboxGrid = document.getElementById('inboxGrid');
+  function renderInbox(){
+    inboxGrid.innerHTML = '';
+    letters.forEach(letter => {
+      const div = document.createElement('div');
+      div.className = 'envelope';
+      div.setAttribute('role','button');
+      div.setAttribute('tabindex','0');
+      div.innerHTML = `
+        <div class="env-top">
+          <div class="circle">${letter.title.split(' ')[0][0] || 'L'}</div>
+          <div style="flex:1">
+            <div class="env-title">${letter.title}</div>
+            <div class="env-sub">From: ${letter.from} • ${letter.preview}</div>
+          </div>
+        </div>
+        <div class="read-dot" style="display:${state.read[letter.id] ? 'none' : 'block'}"></div>
+      `;
+      div.addEventListener('click', ()=> openLetter(letter));
+      div.addEventListener('keypress', (e)=> { if (e.key === 'Enter') openLetter(letter); });
+      inboxGrid.appendChild(div);
+    });
+  }
+
+  function openLetter(letter){
+    state.read[letter.id] = true;
+    saveState();
+    renderInbox();
+    showModal(letter.title, `<p style="color:var(--muted);line-height:1.5">${escapeHtml(letter.body)}</p>`, [
+      {text:'Close', cls:'btn'},
+      {text:'Next', cls:'primary', action: ()=> { closeModal(); focusNextLetter(letter.id); }}
+    ]);
+  }
+
+  function focusNextLetter(currId){
+    const unread = letters.find(l => !state.read[l.id]);
+    if (unread) setTimeout(()=> openLetter(unread), 300);
+    else setTimeout(()=> showSection('quiz'), 400);
+  }
+
+  // Modal helpers
+  function showModal(title, htmlContent, buttons=[]){
+    modalRoot.classList.remove('hide');
+    modalRoot.setAttribute('aria-hidden','false');
+    modalRoot.innerHTML = `
+      <div class="modal-bg" id="modalBG">
+        <div class="modal" role="dialog" aria-modal="true" aria-label="${escapeHtml(title)}">
+          <h3>${escapeHtml(title)}</h3>
+          <div style="margin-top:10px">${htmlContent}</div>
+          <div class="btn-row" id="modalBtns"></div>
+        </div>
+      </div>
+    `;
+    const btnRow = document.getElementById('modalBtns');
+    buttons.forEach((b,idx)=>{
+      const btn = document.createElement('button');
+      btn.className = 'btn ' + (b.cls || '');
+      btn.textContent = b.text;
+      btn.addEventListener('click', ()=> {
+        if (b.action) b.action();
+        else closeModal();
+      });
+      btnRow.appendChild(btn);
+    });
+    document.getElementById('modalBG').addEventListener('click', (e)=>{
+      if (e.target.id === 'modalBG') closeModal();
+    });
+  }
+  function closeModal(){ modalRoot.classList.add('hide'); modalRoot.setAttribute('aria-hidden','true'); modalRoot.innerHTML = ''; }
+  function escapeHtml(str){ return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+  // Quiz - two open-ended questions (input save to localStorage automatically)
+  const quizQuestions = [
+    { id: 'q1', q: "What was the first clue that I liked you?" },
+    { id: 'q2', q: "What's something you like that you'd want me to get into?" }
+  ];
+
+  const quizContent = document.getElementById('quizContent');
+  function renderQuiz(){
+    quizContent.innerHTML = '';
+    quizQuestions.forEach(item => {
+      const wrap = document.createElement('div');
+      wrap.className = 'question';
+      const saved = state.answers[item.id] || '';
+      wrap.innerHTML = `
+        <label for="${item.id}">${escapeHtml(item.q)}</label>
+        <textarea id="${item.id}" rows="3" placeholder="Write your answer...">${escapeHtml(saved)}</textarea>
+        <div class="savedNote" id="${item.id}_note">${saved ? 'Saved ✓' : ''}</div>
+      `;
+      quizContent.appendChild(wrap);
+      const ta = wrap.querySelector('textarea');
+      ta.addEventListener('input', (e)=> {
+        state.answers[item.id] = e.target.value;
+        saveState();
+        const note = document.getElementById(item.id + '_note');
+        note.textContent = 'Saved ✓';
+        // small visual feedback
+        note.style.opacity = '1';
+      });
+    });
+  }
+
+  // Final hearts
+  const heartsContainer = document.getElementById('heartsContainer');
+  let heartInterval = null;
+  function startHearts(){
+    clearHearts();
+    heartInterval = setInterval(createHeart, 420);
+    for(let i=0;i<6;i++) setTimeout(createHeart, i*120);
+  }
+  function clearHearts(){ 
+    clearInterval(heartInterval);
+    heartsContainer.innerHTML = '';
+  }
+  function createHeart(){
+    const heart = document.createElement('div');
+    const size = 18 + Math.random()*36;
+    heart.style.width = size + 'px';
+    heart.style.height = size + 'px';
+    heart.style.position = 'absolute';
+    heart.style.left = (10 + Math.random()*80) + '%';
+    heart.style.bottom = '-20px';
+    heart.style.pointerEvents = 'none';
+    heart.style.opacity = 0;
+    heart.style.transform = 'translateY(0) scale(0.9)';
+    heart.innerHTML = `<svg viewBox="0 0 24 24" width="100%" height="100%" aria-hidden>
+      <path d="M12 21s-8-4.5-8-11 3.6-6 6-6 2 1 2 1 0.8-1 2-1 6 0.5 6 6-8 11-8 11z" fill="${'#d4af37'}"/>
+    </svg>`;
+    heart.style.filter = 'drop-shadow(0 6px 12px rgba(0,0,0,0.6))';
+    heartsContainer.appendChild(heart);
+    const dur = 3800 + Math.random()*900;
+    heart.style.animation = `floatUp ${dur}ms linear forwards`;
+    setTimeout(()=> heart.remove(), dur + 50);
+  }
+
+  // Share / copy
+  document.getElementById('shareBtn').addEventListener('click', async ()=> {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      document.getElementById('copyHint').textContent = 'Link copied to clipboard — send it with love 💌';
+    } catch (e){
+      document.getElementById('copyHint').textContent = 'Unable to copy automatically — use your browser address bar.';
+    }
+  });
+
+  // replay
+  document.getElementById('replayBtn').addEventListener('click', ()=> { showSection('inbox'); clearHearts(); });
+
+  // small accessibility keyboard shortcuts
+  document.addEventListener('keydown', (e)=>{
+    if (e.key === '1') showSection('home');
+    if (e.key === '2') showSection('inbox');
+    if (e.key === '3') showSection('quiz');
+    if (e.key === '4') { showSection('final'); startHearts(); }
+  });
+
+  // init render
+  renderInbox();
+  renderQuiz();
+
+  // Auto open inbox if already unlocked
+  if (state.unlocked) showSection('inbox');
+  else showSection('home');
+
+  // When reaching final, start hearts
+  nav.final.addEventListener('click', ()=> startHearts());
+
+  // expose small helper to download saved answers (so you can see her inputs)
+  window._downloadAnswers = function(){
+    const data = {
+      savedAt: new Date().toISOString(),
+      answers: state.answers,
+      meta: { unlocked: state.unlocked, read: state.read }
+    };
+    const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'her-answers.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+
+})(); // end IIFE
+</script>
+</body>
+</html>
